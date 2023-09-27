@@ -250,26 +250,16 @@ app.get('/usuarios/nombre/:id', (req, res) =>{
 
 //10- Crear el endpoint que permita obtener el total del stock actual de productos, la sumatoria de los precios individuales.
 
-app.get('/productos/stock', (req, res) => {
+  app.get('/productos/total-stock', (req, res) => {
     try {
-      let totalStock = 0
-      let totalPrice = 0
-  
-      datos.productos.forEach((producto) => {
-        totalStock += producto.stock
-        totalPrice += producto.precio * producto.stock // Multiplica el precio por el stock
-      })
-  
-      res.status(200).json({
-        'stock': totalStock,
-        'totalPrice': totalPrice
-      })
+      const productos = datos.productos
+      const totalStock = productos.reduce((total, producto) => total + producto.precio, 0)
+
+      res.status(200).json({ totalStock })
     } catch (error) {
-      res.status(204).json({'message': error})
+      res.status(500).json({ message: 'Error en el Servidor' })
     }
   })
-
-
 
 app.use((req, res) => {
 	res.status(404).send('<h1>404</h1>')

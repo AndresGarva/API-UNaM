@@ -32,6 +32,6 @@
 ###GET http://localhost:1234/usuarios/nombre/1
 
 //Consulta 10
-###GET http://localhost:1234/productos/total
+GET http://localhost:1234/productos/total-stock
 
 
