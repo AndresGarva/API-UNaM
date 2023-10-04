@@ -247,7 +247,6 @@ app.get('/usuarios/nombre/:id', (req, res) =>{
         res.status(204).json({'message': error})
     }   
 })  
-
 //10- Crear el endpoint que permita obtener el total del stock actual de productos, la sumatoria de los precios individuales.
 
   app.get('/productos/total-stock', (req, res) => {

@@ -1,0 +1,60 @@
+###Consulta 1
+GET http://localhost:1234/usuarios/
+
+###Consulta 2
+GET http://localhost:1234/usuarios/1
+
+###Consulta 3
+
+POST http://localhost:1234/usuarios/
+Content-Type: application/json
+
+{
+    "id": 11,
+    "dni": "11-162-9627",
+    "nombres": "Gerna",
+    "apellidos": "Vorler",
+    "email": "gvorler0@fotki.com",
+    "telefono": "483-804-2424"
+}
+
+###Consulta 
+PATCH http://localhost:1234/usuarios/1/
+Content-Type: application/json
+{
+"nombres": "Vermax"
+}
+###Consulta
+DELETE http://localhost:1234/usuarios/1
+
+### 
+GET http://localhost:1234/productos/
+
+###
+
+GET http://localhost:1234/productos/1  
+
+###
+
+POST http://localhost:1234/productos
+Content-Type: application/json
+
+{
+    "id": 11,
+    "nombre": "Mixer multiuso ACME",
+    "tipo": "Electrodoméstico de cocina",
+    "precio": 150.15
+}
+
+###
+
+PATCH http://localhost:1234/productos/10
+Content-Type: application/json
+
+{
+    "nombre": "Mixer multiuso ACME PODEROSO"
+}
+
+###
+DELETE http://localhost:1234/productos/7
+    

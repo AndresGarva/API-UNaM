@@ -2,17 +2,26 @@
 ### /productos
 
 //Consulta "Mostrar todos los productos"
-###GET http://localhost:1234/productos
+###GET http://localhost:1234/productos/
 
 //Consulta 1
-###GET http://localhost:1234/usuarios
+###GET http://localhost:1234/usuarios/
 
 //Consulta 2
-###GET http://localhost:1234/usuarios/1
+GET http://localhost:1234/usuarios/1
 
 //Consulta 3
-###POST  http://localhost:1234/usuarios
+###POST http://localhost:1234/usuarios/
+Content-Type: application/json
 
+{
+        "id": 11,
+        "dni": "20797840",
+        "nombres": "Juan",
+        "apellidos": "Carlos",
+        "email": "juanca@example.com",
+        "telefono": "243-567-3487"
+      }
 //Consulta 4
 ###PUT http://localhost:1234/usuarios/1
 
@@ -32,6 +41,6 @@
 ###GET http://localhost:1234/usuarios/nombre/1
 
 //Consulta 10
-GET http://localhost:1234/productos/total-stock
+###GET http://localhost:1234/productos/total-stock
 
 
