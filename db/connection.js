@@ -1,15 +1,19 @@
+/* eslint-disable no-undef */
 /* eslint-disable indent */
 import { Sequelize } from 'sequelize'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 // Creamos instancia del objeto Sequelize
 
 const db = new Sequelize(
-    'yvksglvw', // DB Name
-    'yvksglvw', // User Name
-    'sj3ZgcBl_youdnP9YFcyY_oYeibZl0d1', // Password
+    process.env.DB_NAME, // DB Name
+    process.env.DB_USERNAME, // User Name
+    process.env.DB_PASSWORD, // Password
     {
-        host: 'silly.db.elephantsql.com',
-        dialect: 'postgres',
+        host: process.env.DB_HOSTNAME,
+        dialect: process.env.DB_DIALECT,
         logging: true 
     }
 )
