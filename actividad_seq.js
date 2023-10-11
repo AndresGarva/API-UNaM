@@ -1,15 +1,64 @@
+/* eslint-disable no-undef */
 /* eslint-disable indent */
 import express from 'express'
+
+import jwt from 'jsonwebtoken'
 import db from './db/connection.js'
 import Producto from './models/producto.js'
 import Usuario from './models/usuario.js'
-import { JSON } from 'sequelize'
+//import { JSON } from 'sequelize'
 
 const html = '<h1>Bienvenido a la API</h1><p>Los comandos disponibles son:</p><ul><li>GET: /productos/</li><li>GET: /productos/id</li>    <li>POST: /productos/</li>    <li>DELETE: /productos/id</li>    <li>PUT: /productos/id</li>    <li>PATCH: /productos/id</li>    <li>GET: /usuarios/</li>    <li>GET: /usuarios/id</li>    <li>POST: /usuarios/</li>    <li>DELETE: /usuarios/id</li>    <li>PUT: /usuarios/id</li>    <li>PATCH: /usuarios/id</li></ul>'
 
 const app = express()
 
 const exposedPort = 1234
+
+// Middleware para la validacion de los token recibidos
+function autenticacionDeToken(req, res, next){
+    const headerAuthorization = req.headers['authorization']
+
+    const tokenRecibido = headerAuthorization.split('')[1]
+
+    if (tokenRecibido == null){
+        return res.status(401).json({message: 'Token inválido'})
+    }
+
+    let payload = null
+
+    try {
+        // intentamos sacar los datos del payload del token
+        payload = jwt.verify(tokenRecibido, process.env.SECRET_KEY)
+    } catch (error) {
+        return res.status(401).json({message: 'Token inválido'})
+    }
+    
+    if (Date.now() > payload.exp){
+        return res.status(401).json({message: 'Token caducado'})
+    }
+
+    // Pasadas las validaciones
+    req.user = payload.sub
+
+    next()
+}
+// Middleware que construye el body en req de tipo post y patch
+app.use((req, res, next) =>{
+    if ((req.method !== 'POST') && (req.method !== 'PATCH')) { return next()}
+
+    if (req.headers['content-type'] !== 'application/json') { return next()}
+
+    let bodyTemporal = ''
+
+    req.on('data', (chunk) => {
+        bodyTemporal += chunk.toString()
+    })
+
+    req.on('end', () => {
+        req.body = JSON.parse(bodyTemporal)
+
+        next()
+})})
 
 app.get('/', (req, res) => {
     res.status(200).send(html)
@@ -49,7 +98,44 @@ app.get('/usuarios/:id', async (req, res) =>{
         
     }
 })
+// Endpoint para la validacion de los datos de logueo
+app.post('/auth', async (req, res) => {
 
+    //obtencion datos de logueo
+    const usuarioABuscar = req.body.usuario
+    const passwordRecibido = req.body.password
+
+    let usuarioEncontrado = ''
+
+    // Comprobacion del usuario
+    try {
+        usuarioEncontrado = await Usuario.findAll({where:{usuario:usuarioABuscar}})
+
+        if (usuarioEncontrado == ''){ return res.status(400).json({message: 'Usuario no encontrado'}) }
+    } catch (error) {
+        return res.status(400).json({message: 'Usuario no encontrado'})
+    }
+
+    // Comprobacion del password
+    if (usuarioEncontrado[0].password !== passwordRecibido){
+        return res.status(400).json({message: 'Password incorrecto'})
+    }
+
+    // Generacion del token
+    const sub = usuarioEncontrado[0].id
+    const usuario = usuarioEncontrado[0].usuario
+    const nivel = usuarioEncontrado[0].nivel
+
+    // firma y construccion del token
+    const token = jwt.sign({
+        sub,
+        usuario,
+        nivel,
+        exp: Date.now() + (60 * 1000)
+    }, process.env.SECRET_KEY)
+
+    res.status(200).json({ accessToken: token })
+})
 //Crear el endpoint ‘/usuarios/’ que permita guardar un nuevo usuario.
 
 app.post('/usuarios', (req, res) => {
@@ -161,21 +247,11 @@ app.get('/productos/:id', async (req, res) => {
 })
 
 
-app.post('/productos', (req, res) => {
+app.post('/productos', autenticacionDeToken, async (req, res) => {
     try {
-        let bodyTemp = ''
-
-        req.on('data', (chunk) => {
-            bodyTemp += chunk.toString()
-        })
-    
-        req.on('end', async () => {
-            const data = JSON.parse(bodyTemp)
-            req.body = data
             //datos.productos.push(req.body)
             const productoAGuardar = new Producto(req.body)
             await productoAGuardar.save()
-        })
     
         res.status(201).json({'message': 'success'})
 

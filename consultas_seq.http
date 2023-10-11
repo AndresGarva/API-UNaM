@@ -29,27 +29,31 @@ DELETE http://localhost:1234/usuarios/1
 
 ### 
 GET http://localhost:1234/productos/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzdWFyaW8iOiJlYml4bGV5MSIsIm5pdmVsIjoxLCJleHAiOjE2OTcwNjQ4NzAzMjEsImlhdCI6MTY5NzA2NDgxMH0.jrh8QeZ6OUG30lS2mvfdH0VprMWY0O34sSiCul7Di9w
 
 ###
 
 GET http://localhost:1234/productos/1  
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzdWFyaW8iOiJlYml4bGV5MSIsIm5pdmVsIjoxLCJleHAiOjE2OTcwNjQ4NzAzMjEsImlhdCI6MTY5NzA2NDgxMH0.jrh8QeZ6OUG30lS2mvfdH0VprMWY0O34sSiCul7Di9w
 
 ###
 
 POST http://localhost:1234/productos
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzdWFyaW8iOiJlYml4bGV5MSIsIm5pdmVsIjoxLCJleHAiOjE2OTcwNjQ4NzAzMjEsImlhdCI6MTY5NzA2NDgxMH0.jrh8QeZ6OUG30lS2mvfdH0VprMWY0O34sSiCul7Di9w
 
 {
-    "id": 11,
-    "nombre": "Mixer multiuso ACME",
+    "id": 13,
+    "nombre": "Mixer maximus",
     "tipo": "Electrodoméstico de cocina",
-    "precio": 150.15
+    "precio": 199.15
 }
 
 ###
 
 PATCH http://localhost:1234/productos/10
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzdWFyaW8iOiJlYml4bGV5MSIsIm5pdmVsIjoxLCJleHAiOjE2OTcwNjQ4NzAzMjEsImlhdCI6MTY5NzA2NDgxMH0.jrh8QeZ6OUG30lS2mvfdH0VprMWY0O34sSiCul7Di9w
 
 {
     "nombre": "Mixer multiuso ACME PODEROSO"
@@ -58,3 +62,13 @@ Content-Type: application/json
 ###
 DELETE http://localhost:1234/productos/7
     
+
+###
+
+POST http://localhost:1234/auth
+Content-Type: application/json
+
+    {
+        "usuario": "ebixley1",
+        "password": "Bixley"
+    }
